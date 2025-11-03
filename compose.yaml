@@ -1,0 +1,8 @@
+﻿services:
+  noteweb:
+    image: noteweb
+    build:
+      context: .
+      dockerfile: NoteWeb/Dockerfile
+    ports:
+      - "1556"               
