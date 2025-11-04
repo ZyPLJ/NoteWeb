@@ -108,6 +108,12 @@ NoteWeb/
 3. 运行以下命令启动应用：
 
 ```bash
+cd NoteWeb
+
+dotnet restore
+
+dotnet build -c Release
+
 dotnet run
 ```
 
