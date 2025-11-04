@@ -39,12 +39,12 @@ app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 
-// get all notes 按时间降序 取前100
+// get all notes 按时间降序 取前150条
 app.MapGet("/api/notes",
     async (MyDbContext db) =>
     {
         return await db.Notes.OrderByDescending(c => c.CreatedAt)
-            .Take(100)
+            .Take(150)
             .Select(a => a.Content)
             .ToListAsync();
     });
