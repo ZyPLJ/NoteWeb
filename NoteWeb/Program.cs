@@ -1,3 +1,4 @@
+using Ganss.Xss;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NoteWeb.Entity;
@@ -63,10 +64,11 @@ app.MapPost("/api/notes",
                 Message = "便签内容不能超过30个字"
             });
         }
-
+        
+        var sanitizer = new HtmlSanitizer();
         Note note = new Note
         {
-            Content = dto.Content,
+            Content = sanitizer.Sanitize(dto.Content),
             CreatedAt = DateTime.UtcNow
         };
         db.Notes.Add(note);
