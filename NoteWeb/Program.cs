@@ -66,6 +66,8 @@ app.MapPost("/api/notes",
         }
         
         var sanitizer = new HtmlSanitizer();
+        sanitizer.AllowedTags.Remove("img");
+        sanitizer.AllowedTags.Remove("a");
         Note note = new Note
         {
             Content = sanitizer.Sanitize(dto.Content),
