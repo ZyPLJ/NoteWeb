@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NoteWeb.Entity;
 using NoteWeb.Entity.Model;
+using NoteWeb.Services;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,8 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .WithExposedHeaders("http://localhost:1556/", "https://localhost:1556/api"));
 });
+
+builder.Services.AddScoped<TempFilterService>();
 
 var app = builder.Build();
 
@@ -52,7 +55,7 @@ app.MapGet("/api/notes",
 
 // add a new note
 app.MapPost("/api/notes",
-    async (MyDbContext db, [FromBody] NoteDto dto) =>
+    async (MyDbContext db, TempFilterService filter, [FromBody] NoteDto dto) =>
     {
         // Content 不能超过30个中文字符
         if (dto.Content.Length > 30)
@@ -64,15 +67,27 @@ app.MapPost("/api/notes",
                 Message = "便签内容不能超过30个字"
             });
         }
-        
+
+        if (filter.CheckBadWord(dto.Content))
+        {
+            return Results.Json(new ApiResponse
+            {
+                StatusCode = 400,
+                Successful = false,
+                Message = "便签内容包含不良内容，请修改后重试"
+            });
+        }
+
         var sanitizer = new HtmlSanitizer();
         sanitizer.AllowedTags.Remove("img");
         sanitizer.AllowedTags.Remove("a");
+
         Note note = new Note
         {
             Content = sanitizer.Sanitize(dto.Content),
             CreatedAt = DateTime.UtcNow
         };
+
         db.Notes.Add(note);
         await db.SaveChangesAsync();
         return Results.Json(new ApiResponse
