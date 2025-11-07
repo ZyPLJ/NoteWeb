@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NoteWeb.Entity;
 using NoteWeb.Entity.Model;
+using NoteWeb.Expand;
 using NoteWeb.Services;
 using Scalar.AspNetCore;
 
@@ -27,6 +28,11 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<TempFilterService>();
 
+builder.Services.AddOptions();
+builder.Services.AddRateLimit(builder.Configuration);
+
+builder.Services.AddMemoryCache();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -42,6 +48,14 @@ if (app.Environment.IsDevelopment())
 app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
+
+//添加中间件
+app.UseStaticFiles(new StaticFileOptions
+{
+    ServeUnknownFileTypes = true
+});
+
+app.UseRateLimit();
 
 // get all notes 按时间降序 取前150条
 app.MapGet("/api/notes",
@@ -95,8 +109,6 @@ app.MapPost("/api/notes",
             Message = "新增便签成功"
         });
     });
-
-app.UseStaticFiles();
 
 app.Run();
 
