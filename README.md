@@ -137,7 +137,7 @@ dotnet run
 ## Docker部署
 
 - 在任意目录克隆本项目：`git clone https://github.com/ZyPLJ/NoteWeb.git`
-- 进入项目根目录：`cd ../NoteWeb`
+- 进入项目根目录：`cd ../NoteWeb` 注意 这里是根目录是指与compose.yaml同级的目录
 - 执行`Docekr`命令：`docker-compose up --build -d`
 
 ## 注意事项
