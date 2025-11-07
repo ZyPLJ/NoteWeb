@@ -31,8 +31,6 @@ builder.Services.AddScoped<TempFilterService>();
 builder.Services.AddOptions();
 builder.Services.AddRateLimit(builder.Configuration);
 
-builder.Services.AddMemoryCache();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -49,12 +47,10 @@ app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 
-//添加中间件
-app.UseStaticFiles(new StaticFileOptions
-{
-    ServeUnknownFileTypes = true
-});
+// 启用静态文件服务
+app.UseStaticFiles();
 
+// 启用限流中间件
 app.UseRateLimit();
 
 // get all notes 按时间降序 取前150条
