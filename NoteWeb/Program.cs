@@ -60,7 +60,8 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
     DashboardTitle = "任务调度监控",
     Authorization =
     [
-        new HangfireDashboardAuthorizationFilter(app.Configuration)
+        new HangfireDashboardAuthorizationFilter(app.Configuration,
+            app.Services.GetRequiredService<ILogger<HangfireDashboardAuthorizationFilter>>())
     ]
 });
 
