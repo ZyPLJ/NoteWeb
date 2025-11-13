@@ -38,6 +38,24 @@
       <None Update="noteweb.db">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="fonts\.uuid">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="fonts\DejaVuSans.ttf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="fonts\DejaVuSans-Bold.ttf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="fonts\DejaVuSans-BoldOblique.ttf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="fonts\DejaVuSans-ExtraLight.ttf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="fonts\DejaVuSans-Oblique.ttf">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

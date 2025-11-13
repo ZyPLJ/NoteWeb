@@ -5,7 +5,6 @@ COPY *.sln .
 COPY ["NoteWeb/NoteWeb.csproj", "NoteWeb/"]
 RUN dotnet restore "NoteWeb/NoteWeb.csproj"
 
-COPY fonts/ /usr/share/fonts/dejavu/
 COPY . .
 WORKDIR "/src/NoteWeb"
 RUN dotnet publish -c Release -o /app/publish
