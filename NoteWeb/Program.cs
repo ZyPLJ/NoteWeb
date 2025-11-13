@@ -1,4 +1,6 @@
 using Ganss.Xss;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NoteWeb.Entity;
@@ -8,6 +10,9 @@ using NoteWeb.Services;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders(); // 移除 EventLogProvider
+builder.Logging.AddConsole(); // 改为控制台日志
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -27,9 +32,14 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<TempFilterService>();
+builder.Services.AddScoped<WordCloudService>();
 
 builder.Services.AddOptions();
 builder.Services.AddRateLimit(builder.Configuration);
+
+builder.Services.AddHangfire(config =>
+    config.UseMemoryStorage());
+builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
@@ -43,12 +53,29 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+// 配置定时任务
+// 配置 Hangfire 仪表板
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    DashboardTitle = "任务调度监控",
+    Authorization =
+    [
+        new HangfireDashboardAuthorizationFilter(app.Configuration)
+    ]
+});
+
+// 每天0:00, 4:00, 8:00, 12:00, 16:00, 20:00执行
+RecurringJob.AddOrUpdate<WordCloudService>(
+    "generate-wordcloud",
+    service => service.GenerateWordCloud(),
+    "0 0,4,8,12,16,20 * * *");
+
 app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 
 // 启用静态文件服务
-app.UseStaticFiles();
+app.MapStaticAssets();
 
 // 启用限流中间件
 app.UseRateLimit();
@@ -107,7 +134,6 @@ app.MapPost("/api/notes",
     });
 
 app.Run();
-
 
 class NoteDto
 {
