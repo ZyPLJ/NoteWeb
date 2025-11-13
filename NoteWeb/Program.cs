@@ -1,6 +1,7 @@
 using Ganss.Xss;
 using Hangfire;
 using Hangfire.MemoryStorage;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NoteWeb.Entity;
@@ -52,6 +53,19 @@ if (app.Environment.IsDevelopment())
         options.WithTitle("NoteWeb API"); // 设置标题
     });
 }
+
+// 告诉 ASP.NET Core 使用 Nginx 转发的头部
+var forwardedHeaderOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+
+// ⚠️ 默认只信任本机代理（127.0.0.1），但 Docker 内部的宿主机可能不是127，而是172网段
+// 所以建议明确允许所有代理来源（或指定你的宿主机网段）
+forwardedHeaderOptions.KnownNetworks.Clear();
+forwardedHeaderOptions.KnownProxies.Clear();
+
+app.UseForwardedHeaders(forwardedHeaderOptions);
 
 // 配置定时任务
 // 配置 Hangfire 仪表板
