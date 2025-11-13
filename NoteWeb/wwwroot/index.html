@@ -294,6 +294,58 @@
             transform: translateY(0);
             box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
         }
+
+        #top-link-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000002;
+        }
+
+        #top-link-container .top-link-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.35);
+            color: rgba(0, 0, 0, 0.72);
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            backdrop-filter: blur(10px);
+            transition: all 0.25s ease;
+        }
+
+        #top-link-container .top-link-button .top-link-icon {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            fill: rgba(76, 175, 80, 0.8);
+            transition: transform 0.25s ease, fill 0.25s ease;
+        }
+
+        #top-link-container .top-link-button:hover {
+            background: rgba(255, 255, 255, 0.55);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+        }
+
+        #top-link-container .top-link-button:hover .top-link-icon {
+            transform: scale(1.1);
+            fill: rgba(76, 175, 80, 1);
+        }
+
+        #top-link-container .top-link-button:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+        }
     </style>
 </head>
 <body>
@@ -310,6 +362,14 @@
                 fill="currentColor" class="octo-body"></path>
     </svg>
 </a>
+<div id="top-link-container">
+    <a class="top-link-button" href="/wordcloud.png" target="_blank" rel="noopener noreferrer">
+        <svg class="top-link-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M5 5h7v2H7v10h10v-5h2v7a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Zm11-2h5v5h-2V5.414l-6.793 6.793-1.414-1.414L17.586 4H16V3Z"></path>
+        </svg>
+        词云图
+    </a>
+</div>
 <div id="board"></div>
 <!-- 添加便签输入区域 -->
 <div id="note-input-container">
