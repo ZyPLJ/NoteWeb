@@ -35,11 +35,7 @@ public class WordCloudService
                 .ToDictionary(kv => kv.Key, kv => kv.Value)
                 .Select(kv => new WordScore(kv.Key, kv.Value));
 
-            WordCloud wc = WordCloud.Create(new WordCloudOptions(1000, 1000, words)
-                {
-                    FontManager = new FontManager([SKTypeface.FromFamilyName("DejaVu Sans")])
-                }
-            );
+            WordCloud wc = WordCloud.Create(new WordCloudOptions(1000, 1000, words));
             byte[] pngBytes = wc.ToSKBitmap().Encode(SKEncodedImageFormat.Png, 100).AsSpan().ToArray();
 
             string filePath = "wwwroot/wordcloud.png";
