@@ -90,7 +90,7 @@ app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 
 // 启用静态文件服务
-app.MapStaticAssets();
+app.UseStaticFiles();
 
 // 启用限流中间件
 app.UseRateLimit();
