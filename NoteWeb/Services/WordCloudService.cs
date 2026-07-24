@@ -36,7 +36,9 @@ public class WordCloudService
                 .Select(kv => new WordScore(kv.Key, kv.Value));
 
             WordCloud wc = WordCloud.Create(new WordCloudOptions(2000, 2000, words));
-            byte[] pngBytes = wc.ToSKBitmap().Encode(SKEncodedImageFormat.Png, 100).AsSpan().ToArray();
+            using var bitmap = wc.ToSKBitmap();
+            using var data = bitmap.Encode(SKEncodedImageFormat.Png, 100);
+            byte[] pngBytes = data.ToArray();
 
             string filePath = "wwwroot/wordcloud.png";
 
